@@ -141,43 +141,76 @@ onclick="startVoice()">
 
 <script>
 
-function generateImage(){
+async function generateImage(){
 
     const text =
     document.getElementById("prompt").value;
 
+    if(!text){
+
+        alert("請輸入描述");
+
+        return;
+    }
+
+    document.getElementById("loading")
+    .innerHTML =
+    "🎨 正在生成皮影戲人物...";
+
     const img =
     document.getElementById("result");
 
-    document
-    .getElementById("loading")
-    .innerHTML =
-    "🎨 生成中...";
+    try{
 
-    const prompt =
+        const response =
+        await fetch(
+        "https://shadow-puppet-ai0510.vercel.app/api/generate",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+            body:JSON.stringify({
 
-    "Chinese shadow puppet " +
+                prompt:`
+Traditional Chinese shadow puppet,
+ornate leather carving,
+highly detailed,
+full body character,
+dramatic lighting,
+${text}
+`
 
-    text;
+            })
+        });
 
-    img.onload = function(){
+        const data =
+        await response.json();
+
+        img.src =
+        data.image;
+
+        img.style.display =
+        "block";
 
         document
         .getElementById("loading")
         .innerHTML = "";
 
-        img.style.display = "block";
+    }
+    catch(error){
 
-    };
-
-    img.onerror = function(){
+        console.error(error);
 
         document
         .getElementById("loading")
         .innerHTML =
         "❌ 圖片生成失敗";
 
-    };
+    }
+
+}
 
     img.src =
 
