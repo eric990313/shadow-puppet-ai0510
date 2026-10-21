@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<title>AI皮影戲生成器</title>
+
+<style>
+
+body{
+    background:#111;
+    color:white;
+    text-align:center;
+    font-family:Microsoft JhengHei;
+}
+
+textarea{
+
+    width:80%;
+    height:150px;
+
+    font-size:20px;
+
+    padding:10px;
+
+}
+
+button{
+
+    padding:15px;
+
+    font-size:20px;
+
+    margin:20px;
+
+}
+
+img{
+
+    width:90%;
+
+    max-width:800px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>AI皮影戲人物生成器</h1>
+
+<textarea
+id="prompt"
+placeholder="輸入人物描述">
+</textarea>
+
+<br>
+
+<button onclick="generateImage()">
+
+生成人物
+
+</button>
+
+  <button onclick="startVoice()">
+
+  🎤語音輸入
+
+  </button>
+
+  <br>
+
+<img id="result">
+
+<script>
+
+function generateImage(){
+
+  let text =
+  document.getElementById("prompt").value;
+
+  let finalPrompt =
+
+  `
+  Traditional Chinese shadow puppet,
+
+  masterpiece,
+
+  ultra detailed,
+
+  full body,
+
+  traditional leather carving,
+
+  ${text},
+
+  no text,
+
+  no watermark
+  `;
+
+  let imageUrl =
+
+  "https://image.pollinations.ai/prompt/"
+
+  +
+
+  encodeURIComponent(finalPrompt);
+
+  document
+  .getElementById("result")
+  .src = imageUrl;
+
+}
+function startVoice(){
+
+ const SpeechRecognition =
+
+ window.SpeechRecognition ||
+
+ window.webkitSpeechRecognition;
+
+ const recognition =
+
+ new SpeechRecognition();
+
+ recognition.lang = "zh-TW";
+
+ recognition.onresult = e => {
+
+   document
+   .getElementById("prompt")
+   .value =
+   e.results[0][0].transcript;
+
+ };
+
+ recognition.start();
+
+}
+</script>
+
+</body>
+</html>
