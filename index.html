@@ -144,39 +144,22 @@ onclick="startVoice()">
 function generateImage(){
 
     const text =
-    document.getElementById("prompt").value.trim();
-
-    if(!text){
-
-        alert("請輸入角色描述");
-
-        return;
-    }
-
-    document
-    .getElementById("loading")
-    .innerHTML =
-    "🎨 AI 正在生成圖片，請稍候...";
+    document.getElementById("prompt").value;
 
     const img =
     document.getElementById("result");
 
-const prompt = `
-Traditional Chinese shadow puppet,
-${text}
-`;
+    document
+    .getElementById("loading")
+    .innerHTML =
+    "🎨 生成中...";
 
-    const imageUrl =
-    "https://image.pollinations.ai/prompt/"
-    +
-    encodeURIComponent(prompt)
-    +
-    "?width=1024&height=1024&seed="
-    +
-    Date.now();
+    const prompt =
 
-    console.log(imageUrl);
-   
+    "Chinese shadow puppet " +
+
+    text;
+
     img.onload = function(){
 
         document
@@ -184,6 +167,7 @@ ${text}
         .innerHTML = "";
 
         img.style.display = "block";
+
     };
 
     img.onerror = function(){
@@ -191,10 +175,16 @@ ${text}
         document
         .getElementById("loading")
         .innerHTML =
-        "❌ 圖片生成失敗，請再試一次";
+        "❌ 圖片生成失敗";
+
     };
 
-    img.src = imageUrl;
+    img.src =
+
+    "https://image.pollinations.ai/prompt/" +
+
+    encodeURIComponent(prompt);
+
 }
 
 function startVoice(){
