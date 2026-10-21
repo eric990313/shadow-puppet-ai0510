@@ -38,9 +38,7 @@ extremely detailed,
 masterpiece
 `;
 
-    }
-
-    else if(text.includes("皇帝")){
+    } else if(text.includes("皇帝")){
 
         finalPrompt = `
 Chinese Emperor,
@@ -52,9 +50,7 @@ highly detailed,
 masterpiece
 `;
 
-    }
-
-    else if(text.includes("公主")){
+    } else if(text.includes("公主")){
 
         finalPrompt = `
 Chinese Princess,
@@ -66,9 +62,7 @@ highly detailed,
 masterpiece
 `;
 
-    }
-
-    else if(text.includes("孫悟空")){
+    } else if(text.includes("孫悟空")){
 
         finalPrompt = `
 Sun Wukong,
@@ -80,9 +74,7 @@ highly detailed,
 masterpiece
 `;
 
-    }
-
-    else{
+    } else {
 
         finalPrompt = `
 Traditional Chinese Shadow Puppet,
@@ -99,15 +91,16 @@ masterpiece
         const response =
         await fetch(
             "https://shadow-puppet-ai0510.vercel.app/api/generate",
-        {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                prompt: finalPrompt
-            })
-        });
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    prompt: finalPrompt
+                })
+            }
+        );
 
         const data =
         await response.json();
@@ -125,7 +118,7 @@ masterpiece
             loading.innerHTML =
             "";
 
-        }else{
+        } else {
 
             loading.innerHTML =
             "❌ AI沒有回傳圖片";
@@ -133,8 +126,7 @@ masterpiece
             console.log(data);
         }
 
-    }
-    catch(error){
+    } catch(error){
 
         console.error(error);
 
@@ -153,7 +145,7 @@ function startVoice(){
 
     if(!SpeechRecognition){
 
-        alert("請使用Chrome");
+        alert("請使用 Chrome");
 
         return;
     }
