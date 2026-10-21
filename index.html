@@ -1,46 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
+
 <head>
 
 <meta charset="UTF-8">
 
-<title>AI皮影戲生成器</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>AI皮影戲人物生成器</title>
 
 <style>
 
 body{
-    background:#111;
+    margin:0;
+    padding:30px;
+    background:#111827;
     color:white;
+    font-family:"Microsoft JhengHei",sans-serif;
     text-align:center;
-    font-family:Microsoft JhengHei;
+}
+
+h1{
+    color:#fbbf24;
 }
 
 textarea{
 
-    width:80%;
-    height:150px;
+    width:90%;
+    max-width:800px;
 
-    font-size:20px;
+    height:180px;
 
-    padding:10px;
+    padding:15px;
+
+    font-size:18px;
+
+    border-radius:10px;
+
+    border:none;
+
+    resize:none;
 
 }
 
 button{
 
-    padding:15px;
+    padding:15px 25px;
 
-    font-size:20px;
+    font-size:18px;
 
-    margin:20px;
+    margin:10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
 
 }
 
-img{
+.generate{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.voice{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+#loading{
+
+    margin-top:20px;
+
+    font-size:20px;
+
+    color:#fbbf24;
+
+}
+
+#result{
+
+    display:none;
 
     width:90%;
 
-    max-width:800px;
+    max-width:900px;
+
+    margin-top:25px;
+
+    border-radius:15px;
+
+    box-shadow:0 0 20px rgba(0,0,0,.5);
 
 }
 
@@ -52,26 +110,32 @@ img{
 
 <h1>AI皮影戲人物生成器</h1>
 
+<p>
+請輸入人物描述，例如：
+<br>
+紅臉關公拿青龍偃月刀、綠色戰袍、攻擊姿勢
+</p>
+
 <textarea
 id="prompt"
-placeholder="輸入人物描述">
+placeholder="請輸入角色描述">
 </textarea>
 
 <br>
 
-<button onclick="generateImage()">
-
+<button
+class="generate"
+onclick="generateImage()">
 生成人物
-
 </button>
 
-  <button onclick="startVoice()">
+<button
+class="voice"
+onclick="startVoice()">
+🎤語音輸入
+</button>
 
-  🎤語音輸入
-
-  </button>
-
-  <br>
+<div id="loading"></div>
 
 <img id="result">
 
@@ -79,69 +143,113 @@ placeholder="輸入人物描述">
 
 function generateImage(){
 
-  let text =
-  document.getElementById("prompt").value;
+    const text =
+    document.getElementById("prompt").value.trim();
 
-  let finalPrompt =
+    if(!text){
 
-  `
-  Traditional Chinese shadow puppet,
+        alert("請輸入角色描述");
 
-  masterpiece,
+        return;
+    }
 
-  ultra detailed,
+    document
+    .getElementById("loading")
+    .innerHTML =
+    "🎨 AI 正在生成圖片，請稍候...";
 
-  full body,
+    const img =
+    document.getElementById("result");
 
-  traditional leather carving,
+    const prompt = `
+Traditional Chinese shadow puppet,
+masterpiece,
+ultra detailed,
+full body character,
+ornate leather carving,
+traditional Taiwanese shadow puppetry,
+cinematic lighting,
+high quality,
+${text},
+no text,
+no watermark
+`;
 
-  ${text},
+    const imageUrl =
+    "https://image.pollinations.ai/prompt/"
+    +
+    encodeURIComponent(prompt)
+    +
+    "?width=1024&height=1024&seed="
+    +
+    Date.now();
 
-  no text,
+    img.onload = function(){
 
-  no watermark
-  `;
+        document
+        .getElementById("loading")
+        .innerHTML = "";
 
-  let imageUrl =
+        img.style.display = "block";
+    };
 
-  "https://image.pollinations.ai/prompt/"
+    img.onerror = function(){
 
-  +
+        document
+        .getElementById("loading")
+        .innerHTML =
+        "❌ 圖片生成失敗，請再試一次";
+    };
 
-  encodeURIComponent(finalPrompt);
-
-  document
-  .getElementById("result")
-  .src = imageUrl;
-
+    img.src = imageUrl;
 }
+
 function startVoice(){
 
- const SpeechRecognition =
+    const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
- window.SpeechRecognition ||
+    if(!SpeechRecognition){
 
- window.webkitSpeechRecognition;
+        alert("您的瀏覽器不支援語音辨識，請使用 Google Chrome");
 
- const recognition =
+        return;
+    }
 
- new SpeechRecognition();
+    const recognition =
+    new SpeechRecognition();
 
- recognition.lang = "zh-TW";
+    recognition.lang = "zh-TW";
 
- recognition.onresult = e => {
+    recognition.start();
 
-   document
-   .getElementById("prompt")
-   .value =
-   e.results[0][0].transcript;
+    document
+    .getElementById("loading")
+    .innerHTML =
+    "🎤 正在聆聽...";
 
- };
+    recognition.onresult =
+    function(event){
 
- recognition.start();
+        let speechText =
+        event.results[0][0].transcript;
 
+        document
+        .getElementById("prompt")
+        .value =
+        speechText;
+
+        document
+        .getElementById("loading")
+        .innerHTML =
+        "✅ 語音辨識完成";
+
+    };
 }
+
 </script>
 
 </body>
+
 </html>
