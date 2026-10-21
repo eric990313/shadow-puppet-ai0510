@@ -1,164 +1,98 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>AI皮影戲人物生成器</title>
-
-<style>
-
-body{
-    margin:0;
-    padding:30px;
-    background:#111827;
-    color:white;
-    font-family:"Microsoft JhengHei",sans-serif;
-    text-align:center;
-}
-
-h1{
-    color:#fbbf24;
-}
-
-textarea{
-
-    width:90%;
-    max-width:800px;
-
-    height:180px;
-
-    padding:15px;
-
-    font-size:18px;
-
-    border-radius:10px;
-
-    border:none;
-
-    resize:none;
-
-}
-
-button{
-
-    padding:15px 25px;
-
-    font-size:18px;
-
-    margin:10px;
-
-    border:none;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-}
-
-.generate{
-
-    background:#2563eb;
-
-    color:white;
-
-}
-
-.voice{
-
-    background:#dc2626;
-
-    color:white;
-
-}
-
-#loading{
-
-    margin-top:20px;
-
-    font-size:20px;
-
-    color:#fbbf24;
-
-}
-
-#result{
-
-    display:none;
-
-    width:90%;
-
-    max-width:900px;
-
-    margin-top:25px;
-
-    border-radius:15px;
-
-    box-shadow:0 0 20px rgba(0,0,0,.5);
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<h1>AI皮影戲人物生成器</h1>
-
-<p>
-請輸入人物描述，例如：
-<br>
-紅臉關公拿青龍偃月刀、綠色戰袍、攻擊姿勢
-</p>
-
-<textarea
-id="prompt"
-placeholder="請輸入角色描述">
-</textarea>
-
-<br>
-
-<button
-class="generate"
-onclick="generateImage()">
-生成人物
-</button>
-
-<button
-class="voice"
-onclick="startVoice()">
-🎤語音輸入
-</button>
-
-<div id="loading"></div>
-
-<img id="result">
-
 <script>
 
 async function generateImage(){
 
     const text =
-    document.getElementById("prompt").value;
+    document.getElementById("prompt").value.trim();
 
     if(!text){
 
-        alert("請輸入描述");
+        alert("請輸入角色描述");
 
         return;
     }
 
-    document.getElementById("loading")
-    .innerHTML =
-    "🎨 正在生成皮影戲人物...";
+    const loading =
+    document.getElementById("loading");
 
     const img =
     document.getElementById("result");
+
+    loading.innerHTML =
+    "🎨 AI生成中...";
+
+    let finalPrompt = "";
+
+    if(text.includes("關公")){
+
+        finalPrompt = `
+Guan Yu,
+red face,
+long black beard,
+Green Dragon Crescent Blade,
+Ancient Chinese General,
+Traditional Chinese Shadow Puppet,
+ornate leather carving,
+full body,
+extremely detailed,
+masterpiece
+`;
+
+    }
+
+    else if(text.includes("皇帝")){
+
+        finalPrompt = `
+Chinese Emperor,
+Golden Dragon Robe,
+Royal Crown,
+Traditional Chinese Shadow Puppet,
+full body,
+highly detailed,
+masterpiece
+`;
+
+    }
+
+    else if(text.includes("公主")){
+
+        finalPrompt = `
+Chinese Princess,
+Phoenix Crown,
+Chinese Royal Dress,
+Traditional Chinese Shadow Puppet,
+full body,
+highly detailed,
+masterpiece
+`;
+
+    }
+
+    else if(text.includes("孫悟空")){
+
+        finalPrompt = `
+Sun Wukong,
+Monkey King,
+Golden Staff,
+Chinese Shadow Puppet,
+full body,
+highly detailed,
+masterpiece
+`;
+
+    }
+
+    else{
+
+        finalPrompt = `
+Traditional Chinese Shadow Puppet,
+${text},
+full body,
+highly detailed,
+masterpiece
+`;
+
+    }
 
     try{
 
@@ -167,20 +101,14 @@ async function generateImage(){
         "https://shadow-puppet-ai0510.vercel.app/api/generate",
         {
             method:"POST",
+
             headers:{
-                "Content-Type":
-                "application/json"
+                "Content-Type":"application/json"
             },
+
             body:JSON.stringify({
 
-                prompt:`
-Traditional Chinese shadow puppet,
-ornate leather carving,
-highly detailed,
-full body character,
-dramatic lighting,
-${text}
-`
+                prompt:finalPrompt
 
             })
         });
@@ -188,35 +116,34 @@ ${text}
         const data =
         await response.json();
 
-        img.src =
-        data.image;
+        if(data.image){
 
-        img.style.display =
-        "block";
+            img.src =
+            data.image;
 
-        document
-        .getElementById("loading")
-        .innerHTML = "";
+            img.style.display =
+            "block";
+
+            loading.innerHTML =
+            "";
+
+        }else{
+
+            loading.innerHTML =
+            "❌ AI沒有回傳圖片";
+
+        }
 
     }
+
     catch(error){
 
         console.error(error);
 
-        document
-        .getElementById("loading")
-        .innerHTML =
+        loading.innerHTML =
         "❌ 圖片生成失敗";
 
     }
-
-}
-
-    img.src =
-
-    "https://image.pollinations.ai/prompt/" +
-
-    encodeURIComponent(prompt);
 
 }
 
@@ -228,7 +155,7 @@ function startVoice(){
 
     if(!SpeechRecognition){
 
-        alert("您的瀏覽器不支援語音辨識，請使用 Google Chrome");
+        alert("請使用Chrome");
 
         return;
     }
@@ -236,36 +163,21 @@ function startVoice(){
     const recognition =
     new SpeechRecognition();
 
-    recognition.lang = "zh-TW";
-
-    recognition.start();
-
-    document
-    .getElementById("loading")
-    .innerHTML =
-    "🎤 正在聆聽...";
+    recognition.lang =
+    "zh-TW";
 
     recognition.onresult =
     function(event){
 
-        let speechText =
-        event.results[0][0].transcript;
-
         document
         .getElementById("prompt")
         .value =
-        speechText;
-
-        document
-        .getElementById("loading")
-        .innerHTML =
-        "✅ 語音辨識完成";
+        event.results[0][0].transcript;
 
     };
+
+    recognition.start();
+
 }
 
 </script>
-
-</body>
-
-</html>
