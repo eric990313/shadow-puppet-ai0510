@@ -74,7 +74,7 @@ masterpiece
 Sun Wukong,
 Monkey King,
 Golden Staff,
-Chinese Shadow Puppet,
+Traditional Chinese Shadow Puppet,
 full body,
 highly detailed,
 masterpiece
@@ -98,23 +98,21 @@ masterpiece
 
         const response =
         await fetch(
-        "https://shadow-puppet-ai0510.vercel.app/api/generate",
+            "https://shadow-puppet-ai0510.vercel.app/api/generate",
         {
             method:"POST",
-
             headers:{
                 "Content-Type":"application/json"
             },
-
             body:JSON.stringify({
-
-                prompt:finalPrompt
-
+                prompt: finalPrompt
             })
         });
 
         const data =
         await response.json();
+
+        console.log(data);
 
         if(data.image){
 
@@ -132,10 +130,10 @@ masterpiece
             loading.innerHTML =
             "❌ AI沒有回傳圖片";
 
+            console.log(data);
         }
 
     }
-
     catch(error){
 
         console.error(error);
