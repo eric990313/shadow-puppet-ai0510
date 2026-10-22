@@ -1,32 +1,9 @@
 <script>
 
-async function generateImage(){
+function generateImage(){
 
     document.getElementById("loading")
-    .innerHTML =
-    "測試 API";
-
-    const response =
-    await fetch(
-    "https://shadow-puppet-ai0510.vercel.app/api/generate",
-    {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-            prompt:"cat"
-        })
-    });
-
-    const data =
-    await response.json();
-
-    console.log(data);
-
-    document.getElementById("loading")
-    .innerHTML =
-    JSON.stringify(data);
+    .innerHTML = "第一步成功";
 
 }
 
