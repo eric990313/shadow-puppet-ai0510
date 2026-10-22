@@ -6,19 +6,25 @@
 </head>
 <body>
 
-<h1>測試成功</h1>
+<h1>AI皮影戲人物生成器</h1>
 
-<input id="prompt">
+<textarea id="prompt"></textarea>
 
-<button onclick="test()">
-測試
+<br><br>
+
+<button onclick="generateImage()">
+生成人物
 </button>
+
+<div id="loading"></div>
 
 <script>
 
-function test(){
+function generateImage(){
 
-    alert("按鈕正常");
+    document.getElementById("loading")
+    .innerHTML =
+    "按鈕正常";
 
 }
 
