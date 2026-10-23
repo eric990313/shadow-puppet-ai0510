@@ -9,6 +9,9 @@
 <h1>測試成功</h1>
 
 <div id="loading"></div>
+    
+<img id="result">
+
 
 <button onclick="generateImage()">
 測試API
@@ -18,37 +21,33 @@
 
 function generateImage(){
 
-    document.getElementById("loading").innerHTML =
-    "按鈕成功";
+fetch(
+"https://shadow-puppet-ai0510.vercel.app/api/generate",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+prompt:"Traditional Chinese shadow puppet Guan Yu"
+})
+}
+)
+.then(r=>r.json())
+.then(data=>{
 
-    fetch(
-    "https://shadow-puppet-ai0510.vercel.app/api/generate",
-    {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-            prompt:"cat"
-        })
-    })
-    .then(r=>r.json())
-    .then(data=>{
+document.getElementById("loading")
+.innerHTML =
+JSON.stringify(data);
 
-        console.log(data);
+})
+.catch(err=>{
 
-        document.getElementById("loading").innerHTML =
-        JSON.stringify(data);
+document.getElementById("loading")
+.innerHTML =
+err.message;
 
-    })
-    .catch(err=>{
-
-        console.log(err);
-
-        document.getElementById("loading").innerHTML =
-        "錯誤：" + err.message;
-
-    });
+});
 
 }
 
