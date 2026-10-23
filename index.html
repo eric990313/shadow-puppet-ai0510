@@ -1,60 +1,299 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
+
 <head>
+
 <meta charset="UTF-8">
-<title>測試API</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>AI皮影戲人物生成器</title>
+
+<style>
+
+body{
+    background:#111827;
+    color:white;
+    text-align:center;
+    font-family:"Microsoft JhengHei";
+    padding:20px;
+}
+
+h1{
+    color:#fbbf24;
+}
+
+textarea{
+
+    width:90%;
+    max-width:800px;
+
+    height:150px;
+
+    padding:15px;
+
+    font-size:18px;
+
+    border-radius:10px;
+
+}
+
+button{
+
+    padding:12px 20px;
+
+    margin:8px;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    border:none;
+
+    border-radius:10px;
+
+}
+
+#loading{
+
+    margin-top:20px;
+
+    color:#fbbf24;
+
+}
+
+#result{
+
+    width:90%;
+
+    max-width:900px;
+
+    margin-top:20px;
+
+    border-radius:15px;
+
+}
+
+</style>
+
 </head>
+
 <body>
 
-<h1>測試成功</h1>
+<h1>AI皮影戲人物生成器</h1>
 
-<div id="loading"></div>
-    
-<img id="result" width="500">
+<textarea
+id="prompt"
+placeholder="例如：關公拿青龍偃月刀、紅臉、綠袍">
+</textarea>
 
+<br>
 
 <button onclick="generateImage()">
-測試API
+🎨 生成人物
 </button>
+
+<button onclick="startVoice()">
+🎤 語音輸入
+</button>
+
+<div id="loading"></div>
+
+<img id="result">
 
 <script>
 
+function convertPrompt(text){
+
+    if(text.includes("關公")){
+
+        return `
+Guan Yu,
+red face,
+long beard,
+Green Dragon Crescent Blade,
+Traditional Chinese shadow puppet,
+full body,
+ornate leather carving,
+highly detailed,
+dramatic lighting
+`;
+
+    }
+
+    if(text.includes("皇帝")){
+
+        return `
+Chinese Emperor,
+gold dragon robe,
+royal crown,
+Traditional Chinese shadow puppet,
+full body,
+highly detailed
+`;
+
+    }
+
+    if(text.includes("公主")){
+
+        return `
+Chinese Princess,
+phoenix crown,
+royal dress,
+Traditional Chinese shadow puppet,
+full body,
+highly detailed
+`;
+
+    }
+
+    if(text.includes("孫悟空")){
+
+        return `
+Sun Wukong,
+Monkey King,
+golden staff,
+Traditional Chinese shadow puppet,
+full body,
+highly detailed
+`;
+
+    }
+
+    return `
+Traditional Chinese shadow puppet,
+${text},
+full body,
+highly detailed,
+ornate leather carving
+`;
+
+}
+
 function generateImage(){
 
-fetch(
-"https://shadow-puppet-ai0510.vercel.app/api/generate",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-prompt:"Traditional Chinese shadow puppet Guan Yu"
-})
+    const text =
+    document.getElementById("prompt").value;
+
+    if(!text){
+
+        alert("請輸入角色描述");
+
+        return;
+
+    }
+
+    document.getElementById("loading")
+    .innerHTML =
+    "🎨 AI生成中，請稍候...";
+
+    fetch(
+    "https://shadow-puppet-ai0510.vercel.app/api/generate",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            prompt:
+            convertPrompt(text)
+
+        })
+
+    }
+    )
+    .then(r=>r.json())
+    .then(data=>{
+
+        document.getElementById("loading")
+        .innerHTML = "";
+
+        if(data.image){
+
+            document.getElementById("result")
+            .src =
+            data.image;
+
+        }
+
+        else{
+
+            document.getElementById("loading")
+            .innerHTML =
+            JSON.stringify(data);
+
+        }
+
+    })
+    .catch(err=>{
+
+        document.getElementById("loading")
+        .innerHTML =
+        "錯誤：" + err.message;
+
+    });
+
 }
-)
-.then(r=>r.json())
-.then(data=>{
 
-document.getElementById("loading")
-.innerHTML = "";
+function startVoice(){
 
-document.getElementById("result")
-.src =
-data.image;
+    const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-})
-.catch(err=>{
+    if(!SpeechRecognition){
 
-document.getElementById("loading")
-.innerHTML =
-err.message;
+        alert("請使用 Chrome");
 
-});
+        return;
+
+    }
+
+    const recognition =
+    new SpeechRecognition();
+
+    recognition.lang =
+    "zh-TW";
+
+    recognition.start();
+
+    document.getElementById("loading")
+    .innerHTML =
+    "🎤 正在聆聽...";
+
+    recognition.onresult =
+    function(event){
+
+        const text =
+        event.results[0][0].transcript;
+
+        document.getElementById("prompt")
+        .value =
+        text;
+
+        document.getElementById("loading")
+        .innerHTML =
+        "✅ 已輸入：" + text;
+
+    };
+
+    recognition.onerror =
+    function(){
+
+        document.getElementById("loading")
+        .innerHTML =
+        "❌ 語音辨識失敗";
+
+    };
 
 }
 
 </script>
 
 </body>
+
 </html>
