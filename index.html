@@ -37,8 +37,11 @@ prompt:"Traditional Chinese shadow puppet Guan Yu"
 .then(data=>{
 
 document.getElementById("loading")
-.innerHTML =
-JSON.stringify(data);
+.innerHTML = "";
+
+document.getElementById("result")
+.src =
+data.image;
 
 })
 .catch(err=>{
