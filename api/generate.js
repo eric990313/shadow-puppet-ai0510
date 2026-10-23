@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     const { prompt } = req.body;
 
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev",
+      "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-dev",
       {
         method: "POST",
         headers: {
@@ -63,10 +63,8 @@ export default async function handler(req, res) {
     imageBuffer.toString("base64");
 
     return res.status(200).json({
-
       image:
       `data:image/png;base64,${base64}`
-
     });
 
   }
@@ -74,9 +72,7 @@ export default async function handler(req, res) {
   catch(error){
 
     return res.status(500).json({
-
-      error:error.message
-
+      error: String(error)
     });
 
   }
