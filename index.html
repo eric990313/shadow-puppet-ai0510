@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>AI皮影戲人物生成器</title>
@@ -11,9 +11,9 @@
 <style>
 
 body{
-    background:#0f172a;
+    background:#111827;
     color:white;
-    font-family:"Microsoft JhengHei",sans-serif;
+    font-family:"Microsoft JhengHei";
     text-align:center;
     padding:20px;
 }
@@ -22,23 +22,21 @@ h1{
     color:#fbbf24;
 }
 
-textarea{
-    width:90%;
-    max-width:800px;
-    height:180px;
-    padding:15px;
+select{
+    width:300px;
+    padding:12px;
     font-size:18px;
+    margin:10px;
     border-radius:10px;
-    border:none;
 }
 
 button{
     padding:15px 25px;
-    margin:10px;
     font-size:18px;
     border:none;
     border-radius:10px;
     cursor:pointer;
+    margin-top:20px;
 }
 
 #loading{
@@ -50,9 +48,8 @@ button{
 #result{
     width:90%;
     max-width:900px;
-    margin-top:30px;
+    margin-top:20px;
     border-radius:15px;
-    box-shadow:0 0 20px rgba(0,0,0,.5);
 }
 
 </style>
@@ -63,25 +60,45 @@ button{
 
 <h1>AI皮影戲人物生成器</h1>
 
-<p>
-請輸入人物描述，例如：
-<br>
-關公拿青龍偃月刀、紅臉、綠袍
-</p>
+<h3>角色</h3>
 
-<textarea
-id="prompt"
-placeholder="請輸入角色描述">
-</textarea>
+<select id="character">
+
+<option>軍人</option>
+<option>警察</option>
+<option>吸血鬼</option>
+<option>卡通老鼠</option>
+<option>偵探</option>
+<option>小木偶</option>
+<option>人魚</option>
+<option>妖怪</option>
+<option>平民</option>
+<option>漁人</option>
+<option>獸人</option>
+
+</select>
+
+<h3>配件</h3>
+
+<select id="weapon">
+
+<option>長槍</option>
+<option>刀</option>
+<option>劍</option>
+<option>盾牌</option>
+<option>法杖</option>
+<option>棒球棍</option>
+<option>手槍</option>
+<option>手榴彈</option>
+
+</select>
 
 <br>
 
 <button onclick="generateImage()">
-🎨 生成人物
-</button>
 
-<button onclick="startVoice()">
-🎤 語音輸入
+🎨 生成人物
+
 </button>
 
 <div id="loading"></div>
@@ -90,205 +107,148 @@ placeholder="請輸入角色描述">
 
 <script>
 
-function convertPrompt(text){
+const characterMap = {
 
-    if(text.includes("關公")){
+"軍人":"soldier",
+"警察":"police officer",
+"吸血鬼":"vampire",
+"卡通老鼠":"cartoon mouse",
+"偵探":"detective",
+"小木偶":"wooden puppet",
+"人魚":"mermaid",
+"妖怪":"monster spirit",
+"平民":"villager",
+"漁人":"fisherman",
+"獸人":"orc warrior"
 
-        return `
-Traditional Chinese shadow puppet,
-Guan Yu,
-red face,
-long black beard,
-Green Dragon Crescent Blade,
-green armor,
-full body,
-ornate leather carving,
-dramatic stage lighting,
-masterpiece,
-highly detailed
-`;
+};
 
-    }
+const weaponMap = {
 
-    if(text.includes("皇帝")){
+"長槍":{
+weapon:"long spear",
+action:"thrust attack pose"
+},
 
-        return `
-Traditional Chinese shadow puppet,
-Chinese Emperor,
-gold dragon robe,
-royal crown,
-full body,
-ornate leather carving,
-highly detailed,
-masterpiece
-`;
+"刀":{
+weapon:"knife",
+action:"slash attack pose"
+},
 
-    }
+"劍":{
+weapon:"sword",
+action:"sword attack pose"
+},
 
-    if(text.includes("公主")){
+"盾牌":{
+weapon:"shield",
+action:"defense pose"
+},
 
-        return `
-Traditional Chinese shadow puppet,
-Chinese Princess,
-phoenix crown,
-royal dress,
-full body,
-highly detailed,
-masterpiece
-`;
+"法杖":{
+weapon:"magic staff",
+action:"casting magic ball"
+},
 
-    }
+"棒球棍":{
+weapon:"baseball bat",
+action:"baseball swing pose"
+},
 
-    if(text.includes("孫悟空")){
+"手槍":{
+weapon:"pistol",
+action:"shooting pose"
+},
 
-        return `
-Traditional Chinese shadow puppet,
-Sun Wukong,
-Monkey King,
-golden staff,
-full body,
-highly detailed,
-masterpiece
-`;
-
-    }
-
-    return `
-Traditional Chinese shadow puppet,
-${text},
-full body,
-ornate leather carving,
-highly detailed,
-masterpiece
-`;
-
+"手榴彈":{
+weapon:"grenade",
+action:"throwing grenade pose"
 }
+
+};
 
 function generateImage(){
 
-    const text =
-    document.getElementById("prompt").value.trim();
+const character =
 
-    if(!text){
+characterMap[
+document.getElementById("character").value
+];
 
-        alert("請輸入角色描述");
+const weapon =
 
-        return;
+weaponMap[
+document.getElementById("weapon").value
+];
 
-    }
+const prompt =
 
-    document.getElementById("loading")
-    .innerHTML =
-    "🎨 AI生成中，請稍候...";
+`
+Traditional Chinese shadow puppet,
+${character},
+holding ${weapon.weapon},
+${weapon.action},
+full body,
+ornate leather carving,
+dramatic stage lighting,
+highly detailed,
+masterpiece
+`;
 
-    document.getElementById("result")
-    .src = "";
+document.getElementById("loading")
+.innerHTML =
+"🎨 AI生成中...";
 
-    fetch(
-    "https://shadow-puppet-ai0510.vercel.app/api/generate",
-    {
-        method:"POST",
+fetch(
+"https://shadow-puppet-ai0510.vercel.app/api/generate",
+{
+method:"POST",
 
-        headers:{
-            "Content-Type":"application/json"
-        },
+headers:{
+"Content-Type":"application/json"
+},
 
-        body:JSON.stringify({
+body:JSON.stringify({
+prompt:prompt
+})
 
-            prompt:
-            convertPrompt(text)
+}
+)
+.then(r=>r.json())
+.then(data=>{
 
-        })
+if(data.image){
 
-    })
-    .then(r=>r.json())
-    .then(data=>{
+document.getElementById("result")
+.src =
+data.image;
 
-        if(data.image){
+document.getElementById("loading")
+.innerHTML =
+"✅ 生成完成";
 
-            document.getElementById("result")
-            .src =
-            data.image;
+}
+else{
 
-            document.getElementById("loading")
-            .innerHTML =
-            "✅ 生成完成";
-
-        }
-
-        else{
-
-            document.getElementById("loading")
-            .innerHTML =
-            JSON.stringify(data);
-
-        }
-
-    })
-    .catch(err=>{
-
-        document.getElementById("loading")
-        .innerHTML =
-        "❌ " + err.message;
-
-    });
+document.getElementById("loading")
+.innerHTML =
+JSON.stringify(data);
 
 }
 
-function startVoice(){
+})
+.catch(err=>{
 
-    const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+document.getElementById("loading")
+.innerHTML =
+err.message;
 
-    if(!SpeechRecognition){
-
-        alert("請使用 Chrome");
-
-        return;
-
-    }
-
-    const recognition =
-    new SpeechRecognition();
-
-    recognition.lang =
-    "zh-TW";
-
-    recognition.start();
-
-    document.getElementById("loading")
-    .innerHTML =
-    "🎤 正在聆聽...";
-
-    recognition.onresult =
-    function(event){
-
-        const text =
-        event.results[0][0].transcript;
-
-        document.getElementById("prompt")
-        .value =
-        text;
-
-        document.getElementById("loading")
-        .innerHTML =
-        "✅ 已輸入：" + text;
-
-    };
-
-    recognition.onerror =
-    function(){
-
-        document.getElementById("loading")
-        .innerHTML =
-        "❌ 語音辨識失敗";
-
-    };
+});
 
 }
 
 </script>
 
 </body>
+
 </html>
