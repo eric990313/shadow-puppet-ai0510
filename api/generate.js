@@ -23,35 +23,34 @@ export default async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization":
-          `Bearer ${process.env.OPENAI_API_KEY}`
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-
-          model: "gpt-image-1",
-
+          model: "dall-e-3",
           prompt: prompt,
-
-          size: "1024x1024"
-
+          size: "1024x1024",
+          quality: "standard",
+          n: 1
         })
       }
     );
 
-    const data =
-    await response.json();
+    const data = await response.json();
 
-    return res.status(200).json(data);
+    if (!response.ok) {
+      return res.status(500).json(data);
+    }
 
-  }
+    return res.status(200).json({
+      image: data.data[0].url
+    });
 
-  catch(error){
+  } catch (error) {
 
     return res.status(500).json({
       error: error.message
     });
 
   }
-
 }
