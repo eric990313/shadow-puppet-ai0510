@@ -27,7 +27,7 @@ export default async function handler(req, res) {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "dall-e-3",
+         model: "gpt-image-2.5-flare",
           prompt: prompt,
           size: "1024x1024",
           quality: "standard",
