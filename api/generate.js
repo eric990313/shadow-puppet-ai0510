@@ -8,6 +8,12 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      error: "Method not allowed"
+    });
+  }
+
   try {
 
     const { prompt } = req.body;
@@ -17,8 +23,10 @@ export default async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json"
+          "Authorization":
+          `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type":
+          "application/json"
         },
         body: JSON.stringify({
           model: "gpt-image-2",
@@ -28,8 +36,27 @@ export default async function handler(req, res) {
       }
     );
 
-    const data =
-    await response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(500).json(data);
+    }
+
+    if (
+      data.data &&
+      data.data[0] &&
+      data.data[0].b64_json
+    ) {
+
+      return res.status(200).json({
+
+        image:
+        "data:image/png;base64," +
+        data.data[0].b64_json
+
+      });
+
+    }
 
     return res.status(200).json(data);
 
