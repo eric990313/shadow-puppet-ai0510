@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,55 +11,57 @@
 <style>
 
 body{
+
     margin:0;
     padding:20px;
+
     background:#111827;
+
     color:white;
-    font-family:"Microsoft JhengHei",sans-serif;
+
     text-align:center;
+
+    font-family:"Microsoft JhengHei";
+
 }
 
 h1{
-    color:#fbbf24;
-}
 
-h3{
-    margin-top:20px;
+    color:#fbbf24;
+
 }
 
 select{
 
-    width:300px;
+    width:320px;
 
     padding:12px;
 
     font-size:18px;
 
+    margin:10px;
+
     border-radius:10px;
 
     border:none;
-
-    margin:10px;
 
 }
 
 button{
 
-    background:#2563eb;
-
-    color:white;
-
     padding:15px 30px;
+
+    font-size:20px;
 
     border:none;
 
     border-radius:10px;
 
-    font-size:20px;
-
     cursor:pointer;
 
-    margin-top:20px;
+    background:#2563eb;
+
+    color:white;
 
 }
 
@@ -72,103 +75,134 @@ button:hover{
 
     margin-top:20px;
 
-    font-size:20px;
-
     color:#fbbf24;
 
+    font-size:20px;
+
 }
+
+/* 舞台 */
+
+#stage{
+
+    width:100%;
+
+    height:720px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    margin-top:20px;
+
+}
+
+/* 人物 */
 
 #result{
 
-    width:90%;
+    position:absolute;
 
-    max-width:700px;
+    left:50%;
 
-    display:block;
+    bottom:0;
 
-    margin:30px auto;
+    max-width:90%;
 
-    border-radius:20px;
+    max-height:680px;
 
-    transform-origin:center bottom;
+    transform:
+    translateX(-50%);
+
+    transform-origin:
+    center bottom;
 
 }
 
-/* 登場＋待機動畫 */
+/* 登場 */
 
 .show{
 
-    animation:
-    entrance 1s ease-out,
-    idle 4s ease-in-out infinite;
+animation:
+entrance .8s ease-out,
+idle 3.5s ease-in-out infinite;
 
 }
 
 @keyframes entrance{
 
-    0%{
+0%{
 
-        opacity:0;
+opacity:0;
 
-        transform:
-        translateY(100px)
-        scale(.9);
-
-    }
-
-    100%{
-
-        opacity:1;
-
-        transform:
-        translateY(0px)
-        scale(1);
-
-    }
+transform:
+translateX(-50%)
+translateY(100px)
+scale(.9);
 
 }
 
+100%{
+
+opacity:1;
+
+transform:
+translateX(-50%)
+translateY(0px)
+scale(1);
+
+}
+
+}
+
+/* 待機 */
+
 @keyframes idle{
 
-    0%{
+0%{
 
-        transform:
-        translateY(0px)
-        rotate(-0.8deg);
+transform:
+translateX(-50%)
+translateY(0px)
+rotate(-1deg);
 
-    }
+}
 
-    25%{
+25%{
 
-        transform:
-        translateY(-4px)
-        rotate(0.8deg);
+transform:
+translateX(-50%)
+translateY(-4px)
+rotate(1deg);
 
-    }
+}
 
-    50%{
+50%{
 
-        transform:
-        translateY(-8px)
-        rotate(0deg);
+transform:
+translateX(-50%)
+translateY(-8px)
+rotate(0deg);
 
-    }
+}
 
-    75%{
+75%{
 
-        transform:
-        translateY(-4px)
-        rotate(-0.8deg);
+transform:
+translateX(-50%)
+translateY(-4px)
+rotate(-1deg);
 
-    }
+}
 
-    100%{
+100%{
 
-        transform:
-        translateY(0px)
-        rotate(0.8deg);
+transform:
+translateX(-50%)
+translateY(0px)
+rotate(1deg);
 
-    }
+}
 
 }
 
@@ -213,15 +247,21 @@ button:hover{
 
 </select>
 
-<br>
+<br><br>
 
 <button onclick="generateImage()">
+
 🎨 生成人物
+
 </button>
 
 <div id="loading"></div>
 
+<div id="stage">
+
 <img id="result">
+
+</div>
 
 <script>
 
@@ -297,19 +337,34 @@ weaponMap[
 document.getElementById("weapon").value
 ];
 
-const prompt =
+const prompt = `
 
-`
 Traditional Chinese shadow puppet style,
+
 ${character},
+
 holding ${weapon.weapon},
+
 ${weapon.action},
+
 full body character,
-character centered,
-simple background,
+
+centered character,
+
+character only,
+
+isolated character,
+
+plain background,
+
+front view,
+
+game character concept art,
+
 highly detailed,
-masterpiece,
-cinematic lighting
+
+masterpiece
+
 `;
 
 document.getElementById("loading")
@@ -326,9 +381,7 @@ headers:{
 },
 
 body:JSON.stringify({
-
 prompt:prompt
-
 })
 
 }
@@ -357,7 +410,6 @@ document.getElementById("loading")
 "✅ 生成完成";
 
 }
-
 else{
 
 document.getElementById("loading")
@@ -380,4 +432,5 @@ document.getElementById("loading")
 </script>
 
 </body>
+
 </html>
