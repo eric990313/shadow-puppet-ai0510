@@ -206,6 +206,39 @@ rotate(1deg);
 }
 
 }
+#infoPanel{
+
+    margin-top:20px;
+
+    line-height:2;
+
+}
+
+#roleInfo{
+
+    color:#60a5fa;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+}
+
+#weaponInfo{
+
+    color:#34d399;
+
+    font-size:22px;
+
+}
+
+#actionInfo{
+
+    color:#fbbf24;
+
+    font-size:22px;
+
+}
 
 </style>
 
@@ -258,27 +291,80 @@ rotate(1deg);
 
 <div id="loading"></div>
 
+<div id="infoPanel">
+
+<div id="roleInfo"></div>
+
+<div id="weaponInfo"></div>
+
+<div id="actionInfo"></div>
+
+</div>
+
 <div id="stage">
 
 <img id="result">
 
 </div>
-
+    
 <script>
 
 const characterMap = {
 
-"軍人":"soldier",
-"警察":"police officer",
-"吸血鬼":"vampire",
-"卡通老鼠":"cartoon mouse",
-"偵探":"detective",
-"小木偶":"wooden puppet",
-"人魚":"mermaid",
-"妖怪":"fantasy monster",
-"平民":"villager",
-"漁人":"fisherman",
-"獸人":"orc warrior"
+"軍人":{
+cn:"軍人",
+en:"Soldier"
+},
+
+"警察":{
+cn:"警察",
+en:"Police Officer"
+},
+
+"吸血鬼":{
+cn:"吸血鬼",
+en:"Vampire"
+},
+
+"卡通老鼠":{
+cn:"卡通老鼠",
+en:"Cartoon Mouse"
+},
+
+"偵探":{
+cn:"偵探",
+en:"Detective"
+},
+
+"小木偶":{
+cn:"小木偶",
+en:"Wooden Puppet"
+},
+
+"人魚":{
+cn:"人魚",
+en:"Mermaid"
+},
+
+"妖怪":{
+cn:"妖怪",
+en:"Fantasy Monster"
+},
+
+"平民":{
+cn:"平民",
+en:"Villager"
+},
+
+"漁人":{
+cn:"漁人",
+en:"Fisherman"
+},
+
+"獸人":{
+cn:"獸人",
+en:"Orc Warrior"
+}
 
 };
 
@@ -332,7 +418,24 @@ const character =
 characterMap[
 document.getElementById("character").value
 ];
+document.getElementById("roleInfo")
+.innerHTML =
+"角色：" +
+character.cn +
+" (" +
+character.en +
+")";
 
+document.getElementById("weaponInfo")
+.innerHTML =
+"武器：" +
+weapon.weapon;
+
+document.getElementById("actionInfo")
+.innerHTML =
+"動作：" +
+weapon.action;
+    
 const weapon =
 weaponMap[
 document.getElementById("weapon").value
@@ -342,7 +445,7 @@ const prompt = `
 
 Traditional Chinese shadow puppet style,
 
-${character},
+${character.en},
 
 holding ${weapon.weapon},
 
