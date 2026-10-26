@@ -2,21 +2,20 @@
 <html lang="zh-TW">
 
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>AI皮影戲人物生成器</title>
 
 <style>
 
 body{
-    background:#0f172a;
-    color:white;
-    text-align:center;
-    font-family:"Microsoft JhengHei",sans-serif;
+    margin:0;
     padding:20px;
-    overflow-x:hidden;
+    background:#111827;
+    color:white;
+    font-family:"Microsoft JhengHei",sans-serif;
+    text-align:center;
 }
 
 h1{
@@ -39,21 +38,23 @@ select{
 
     border:none;
 
+    margin:10px;
+
 }
 
 button{
 
-    padding:15px 30px;
-
-    font-size:20px;
-
-    border:none;
-
-    border-radius:12px;
-
     background:#2563eb;
 
     color:white;
+
+    padding:15px 30px;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:20px;
 
     cursor:pointer;
 
@@ -83,139 +84,91 @@ button:hover{
 
     max-width:700px;
 
-    margin-top:30px;
+    display:block;
+
+    margin:30px auto;
 
     border-radius:20px;
 
-    filter:
-    drop-shadow(
-    0 0 30px
-    rgba(255,215,0,.6)
-    );
+    transform-origin:center bottom;
 
 }
 
+/* 登場＋待機動畫 */
+
 .show{
 
-animation:
-entrance 1.2s ease-out,
-idle 3s ease-in-out infinite;
+    animation:
+    entrance 1s ease-out,
+    idle 4s ease-in-out infinite;
 
 }
 
 @keyframes entrance{
 
-0%{
+    0%{
 
-opacity:0;
+        opacity:0;
 
-transform:
-translateY(250px)
-scale(.7);
+        transform:
+        translateY(100px)
+        scale(.9);
 
-}
+    }
 
-50%{
+    100%{
 
-opacity:1;
+        opacity:1;
 
-transform:
-translateY(-20px)
-scale(1.05);
+        transform:
+        translateY(0px)
+        scale(1);
 
-}
-
-100%{
-
-opacity:1;
-
-transform:
-translateY(0px)
-scale(1);
-
-}
+    }
 
 }
 
 @keyframes idle{
 
-0%{
-transform:
-translateY(0px)
-rotate(-1deg);
-}
+    0%{
 
-25%{
-transform:
-translateY(-6px)
-rotate(1deg);
-}
+        transform:
+        translateY(0px)
+        rotate(-0.8deg);
 
-50%{
-transform:
-translateY(-12px)
-rotate(0deg);
-}
+    }
 
-75%{
-transform:
-translateY(-6px)
-rotate(-1deg);
-}
+    25%{
 
-100%{
-transform:
-translateY(0px)
-rotate(1deg);
-}
+        transform:
+        translateY(-4px)
+        rotate(0.8deg);
 
-}
+    }
 
-#stageLight{
+    50%{
 
-position:fixed;
+        transform:
+        translateY(-8px)
+        rotate(0deg);
 
-left:50%;
-bottom:-250px;
+    }
 
-transform:translateX(-50%);
+    75%{
 
-width:700px;
-height:700px;
+        transform:
+        translateY(-4px)
+        rotate(-0.8deg);
 
-background:
-radial-gradient(
-circle,
-rgba(255,215,0,.25),
-transparent 70%
-);
+    }
 
-pointer-events:none;
+    100%{
 
-animation:
-lightMove 5s infinite ease-in-out;
+        transform:
+        translateY(0px)
+        rotate(0.8deg);
 
-}
-
-@keyframes lightMove{
-
-0%{
-transform:
-translateX(-50%)
-scale(.9);
-}
-
-50%{
-transform:
-translateX(-50%)
-scale(1.1);
-}
-
-100%{
-transform:
-translateX(-50%)
-scale(.9);
-}
+    }
 
 }
 
@@ -269,8 +222,6 @@ scale(.9);
 <div id="loading"></div>
 
 <img id="result">
-
-<div id="stageLight"></div>
 
 <script>
 
@@ -337,13 +288,11 @@ action:"throwing grenade pose"
 function generateImage(){
 
 const character =
-
 characterMap[
 document.getElementById("character").value
 ];
 
 const weapon =
-
 weaponMap[
 document.getElementById("weapon").value
 ];
@@ -355,20 +304,17 @@ Traditional Chinese shadow puppet style,
 ${character},
 holding ${weapon.weapon},
 ${weapon.action},
-full body,
-ornate leather carving,
-dramatic stage lighting,
-masterpiece,
+full body character,
+character centered,
+simple background,
 highly detailed,
-fantasy game character showcase,
-character selection screen,
-golden spotlight,
-cinematic
+masterpiece,
+cinematic lighting
 `;
 
 document.getElementById("loading")
 .innerHTML =
-"🎨 AI生成中，請稍候約10~20秒...";
+"🎨 AI生成中，請稍候...";
 
 fetch(
 "https://shadow-puppet-ai0510.vercel.app/api/generate",
@@ -380,7 +326,9 @@ headers:{
 },
 
 body:JSON.stringify({
+
 prompt:prompt
+
 })
 
 }
@@ -432,5 +380,4 @@ document.getElementById("loading")
 </script>
 
 </body>
-
 </html>
