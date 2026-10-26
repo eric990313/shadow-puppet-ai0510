@@ -418,6 +418,12 @@ const character =
 characterMap[
 document.getElementById("character").value
 ];
+
+const weapon =
+weaponMap[
+document.getElementById("weapon").value
+];
+
 document.getElementById("roleInfo")
 .innerHTML =
 "角色：" +
@@ -435,12 +441,6 @@ document.getElementById("actionInfo")
 .innerHTML =
 "動作：" +
 weapon.action;
-    
-const weapon =
-weaponMap[
-document.getElementById("weapon").value
-];
-
 const prompt = `
 
 Traditional Chinese shadow puppet style,
