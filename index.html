@@ -248,36 +248,53 @@ rotate(1deg);
 
 <h1>AI皮影戲人物生成器</h1>
 
-<h3>角色</h3>
+<h3>角色 Character</h3>
 
 <select id="character">
 
-<option>軍人</option>
-<option>警察</option>
-<option>吸血鬼</option>
-<option>卡通老鼠</option>
-<option>偵探</option>
-<option>小木偶</option>
-<option>人魚</option>
-<option>妖怪</option>
-<option>平民</option>
-<option>漁人</option>
-<option>獸人</option>
+<option value="軍人">軍人 Soldier</option>
+
+<option value="警察">警察 Police Officer</option>
+
+<option value="吸血鬼">吸血鬼 Vampire</option>
+
+<option value="卡通老鼠">卡通老鼠 Cartoon Mouse</option>
+
+<option value="偵探">偵探 Detective</option>
+
+<option value="小木偶">小木偶 Wooden Puppet</option>
+
+<option value="人魚">人魚 Mermaid</option>
+
+<option value="妖怪">妖怪 Fantasy Monster</option>
+
+<option value="平民">平民 Villager</option>
+
+<option value="漁人">漁人 Fisherman</option>
+
+<option value="獸人">獸人 Orc Warrior</option>
 
 </select>
 
-<h3>武器</h3>
+<h3>武器 Weapon</h3>
 
 <select id="weapon">
 
-<option>長槍</option>
-<option>刀</option>
-<option>劍</option>
-<option>盾牌</option>
-<option>法杖</option>
-<option>棒球棍</option>
-<option>手槍</option>
-<option>手榴彈</option>
+<option value="長槍">長槍 Long Spear</option>
+
+<option value="刀">刀 Knife</option>
+
+<option value="劍">劍 Sword</option>
+
+<option value="盾牌">盾牌 Shield</option>
+
+<option value="法杖">法杖 Magic Staff</option>
+
+<option value="棒球棍">棒球棍 Baseball Bat</option>
+
+<option value="手槍">手槍 Pistol</option>
+
+<option value="手榴彈">手榴彈 Grenade</option>
 
 </select>
 
@@ -285,7 +302,7 @@ rotate(1deg);
 
 <button onclick="generateImage()">
 
-🎨 生成人物
+🎨 生成人物 Generate Character
 
 </button>
 
@@ -426,7 +443,7 @@ document.getElementById("weapon").value
 
 document.getElementById("roleInfo")
 .innerHTML =
-"角色：" +
+"角色 Character：" +
 character.cn +
 " (" +
 character.en +
@@ -434,12 +451,12 @@ character.en +
 
 document.getElementById("weaponInfo")
 .innerHTML =
-"武器：" +
+"武器 Weapon：" +
 weapon.weapon;
 
 document.getElementById("actionInfo")
 .innerHTML =
-"動作：" +
+"動作 Weapon：" +
 weapon.action;
 const prompt = `
 
@@ -490,7 +507,7 @@ masterpiece
 `;
 document.getElementById("loading")
 .innerHTML =
-"🎨 AI生成中，請稍候...";
+"🎨 AI生成中，請稍候... AI is generating; please wait...";
 
 fetch(
 "https://shadow-puppet-ai0510.vercel.app/api/generate",
@@ -528,7 +545,7 @@ img.classList.add("show");
 
 document.getElementById("loading")
 .innerHTML =
-"✅ 生成完成";
+"✅ 生成完成 Complete";
 
 }
 else{
