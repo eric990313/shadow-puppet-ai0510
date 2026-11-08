@@ -30,17 +30,21 @@ h1{
 
     color:#fbbf24;
 
+    margin-bottom:30px;
+
 }
 
 h3{
 
     color:white;
 
+    margin-top:20px;
+
 }
 
 select{
 
-    width:320px;
+    width:360px;
 
     padding:12px;
 
@@ -56,13 +60,13 @@ select{
 
 button{
 
-    padding:15px 30px;
+    padding:15px 35px;
 
-    font-size:20px;
+    font-size:22px;
 
     border:none;
 
-    border-radius:10px;
+    border-radius:12px;
 
     cursor:pointer;
 
@@ -80,17 +84,17 @@ button:hover{
 
 #loading{
 
-    margin-top:20px;
+    margin-top:25px;
+
+    font-size:26px;
 
     color:#fbbf24;
 
-    font-size:22px;
+    font-weight:bold;
 
 }
 
 #stage{
-
-    width:100%;
 
     margin-top:20px;
 
@@ -126,13 +130,13 @@ AI Shadow Puppet Character Generator
 
 <select id="character">
 
-<option>軍人</option>
+<option>軍人 Soldier</option>
 
-<option>警察</option>
+<option>警察 Police Officer</option>
 
-<option>坦克</option>
+<option>坦克 Tank</option>
 
-<option>戰鬥機</option>
+<option>戰鬥機 Fighter Jet</option>
 
 </select>
 
@@ -144,11 +148,11 @@ AI Shadow Puppet Character Generator
 
 <select id="weapon">
 
-<option>步槍</option>
+<option>步槍 Rifle</option>
 
-<option>法杖</option>
+<option>法杖 Magic Staff</option>
 
-<option>手槍</option>
+<option>手槍 Pistol</option>
 
 </select>
 
@@ -156,7 +160,7 @@ AI Shadow Puppet Character Generator
 
 <button onclick="generateVideo()">
 
-🎬 播放角色動畫
+🎬 AI Generate Video
 
 </button>
 
@@ -176,15 +180,11 @@ playsinline>
 
 <script>
 
-const characterSelect =
-document.getElementById("character");
+document
+.getElementById("character")
+.addEventListener("change",function(){
 
-characterSelect.addEventListener(
-"change",
-function(){
-
-const role =
-this.value;
+const role = this.value;
 
 const weapon =
 document.getElementById("weapon");
@@ -193,27 +193,30 @@ const weaponTitle =
 document.getElementById("weaponTitle");
 
 if(
-role==="坦克" ||
-role==="戰鬥機"
+role.includes("Tank") ||
+role.includes("Fighter Jet")
 ){
 
-weapon.style.display="none";
+weapon.style.display = "none";
 
-weaponTitle.style.display="none";
+weaponTitle.style.display = "none";
 
 }
 else{
 
-weapon.style.display="inline-block";
+weapon.style.display = "inline-block";
 
-weaponTitle.style.display="block";
-
-}
+weaponTitle.style.display = "block";
 
 }
-);
+
+});
 
 function generateVideo(){
+
+document.getElementById("loading")
+.innerHTML =
+"⏳ AI is generating video... Please wait.";
 
 const role =
 document.getElementById("character").value;
@@ -223,56 +226,60 @@ document.getElementById("weapon").value;
 
 let file = "";
 
-if(role==="軍人"){
+if(role.includes("Soldier")){
 
-    if(weapon==="步槍")
+    if(weapon.includes("Rifle"))
     file="videos/soldier_rifle.mp4";
 
-    if(weapon==="法杖")
+    if(weapon.includes("Magic Staff"))
     file="videos/soldier_staff.mp4";
 
-    if(weapon==="手槍")
+    if(weapon.includes("Pistol"))
     file="videos/soldier_pistol.mp4";
 
 }
 
-if(role==="警察"){
+if(role.includes("Police")){
 
-    if(weapon==="步槍")
+    if(weapon.includes("Rifle"))
     file="videos/police_rifle.mp4";
 
-    if(weapon==="法杖")
+    if(weapon.includes("Magic Staff"))
     file="videos/police_staff.mp4";
 
-    if(weapon==="手槍")
+    if(weapon.includes("Pistol"))
     file="videos/police_pistol.mp4";
 
 }
 
-if(role==="坦克"){
+if(role.includes("Tank")){
 
     file="videos/tank.mp4";
 
 }
 
-if(role==="戰鬥機"){
+if(role.includes("Fighter Jet")){
 
     file="videos/fighterjet.mp4";
 
 }
 
-document.getElementById("loading")
-.innerHTML =
-"✅ Playing Video";
+setTimeout(function(){
 
-const video =
-document.getElementById("resultVideo");
+    const video =
+    document.getElementById("resultVideo");
 
-video.src = file;
+    video.src = file;
 
-video.load();
+    video.load();
 
-video.play();
+    video.play();
+
+    document.getElementById("loading")
+    .innerHTML =
+    "✅ Video Ready";
+
+},3000);
 
 }
 
