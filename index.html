@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,121 +9,83 @@
 <style>
 
 body{
-
     margin:0;
-
     padding:20px;
-
-    background:#000000;
-
+    background:#000;
     color:white;
-
     text-align:center;
-
     font-family:"Microsoft JhengHei",sans-serif;
-
 }
 
 h1{
-
     color:#fbbf24;
-
-    margin-bottom:30px;
-
     font-size:40px;
-
+    margin-bottom:30px;
 }
 
 h3{
-
     color:white;
-
-    margin-top:20px;
-
 }
 
 select{
-
     width:380px;
-
     padding:12px;
-
-    font-size:18px;
-
     margin:10px;
-
-    border-radius:10px;
-
+    font-size:18px;
     border:none;
-
+    border-radius:10px;
 }
 
 button{
-
-    padding:15px 35px;
-
+    padding:15px 30px;
     font-size:22px;
-
     border:none;
-
-    border-radius:12px;
-
+    border-radius:10px;
     cursor:pointer;
-
     background:#2563eb;
-
     color:white;
-
 }
 
 button:hover{
-
     background:#1d4ed8;
+}
 
+#startBtn{
+    display:none;
+    margin-left:10px;
+    background:#16a34a;
+}
+
+#startBtn:hover{
+    background:#15803d;
 }
 
 #loading{
-
-    margin-top:25px;
-
-    font-size:28px;
-
+    margin-top:20px;
     color:#fbbf24;
-
+    font-size:28px;
     font-weight:bold;
-
 }
 
 #stage{
-
     margin-top:20px;
-
 }
 
 #resultVideo{
-
     width:80vw;
-
     max-height:75vh;
-
-    object-fit:contain;
-
     background:black;
-
+    object-fit:contain;
     border-radius:20px;
-
 }
 
 </style>
-
 </head>
 
 <body>
 
 <h1>
-
 AI Shadow Puppet Character Generator
-
 </h1>
 
 <h3>角色 Character</h3>
@@ -143,9 +103,7 @@ AI Shadow Puppet Character Generator
 </select>
 
 <h3 id="weaponTitle">
-
 武器 Weapon
-
 </h3>
 
 <select id="weapon">
@@ -161,18 +119,11 @@ AI Shadow Puppet Character Generator
 <br><br>
 
 <button onclick="generateVideo()">
-
 🎬 AI Generate Video
-
 </button>
 
-<button
-id="startBtn"
-onclick="startPlayback()"
-style="display:none;margin-left:10px;">
-
+<button id="startBtn" onclick="startPlayback()">
 ▶ Start Presentation
-
 </button>
 
 <div id="loading"></div>
@@ -192,145 +143,136 @@ playsinline>
 
 let pendingVideo = "";
 
-document
-.getElementById("character")
-.addEventListener("change",function(){
+const characterSelect =
+document.getElementById("character");
 
-const role =
-this.value;
+characterSelect.addEventListener("change",function(){
 
-const weapon =
-document.getElementById("weapon");
+    const role = this.value;
 
-const weaponTitle =
-document.getElementById("weaponTitle");
+    const weapon =
+    document.getElementById("weapon");
 
-if(
-role.includes("Tank") ||
-role.includes("Fighter Jet")
-){
+    const weaponTitle =
+    document.getElementById("weaponTitle");
 
-weapon.style.display =
-"none";
+    if(
+        role.includes("Tank") ||
+        role.includes("Fighter Jet")
+    ){
 
-weaponTitle.style.display =
-"none";
+        weapon.style.display = "none";
+        weaponTitle.style.display = "none";
 
-}
-else{
+    }
+    else{
 
-weapon.style.display =
-"inline-block";
+        weapon.style.display = "inline-block";
+        weaponTitle.style.display = "block";
 
-weaponTitle.style.display =
-"block";
-
-}
+    }
 
 });
 
 function generateVideo(){
 
-document.getElementById("loading")
-.innerHTML =
-"⏳ AI is generating video... Please wait.";
-
-document.getElementById("startBtn")
-.style.display =
-"none";
-
-const role =
-document.getElementById("character").value;
-
-const weapon =
-document.getElementById("weapon").value;
-
-let file = "";
-
-if(role.includes("Soldier")){
-
-    if(weapon.includes("Rifle"))
-    file="videos/soldier_rifle.mp4";
-
-    if(weapon.includes("Magic Staff"))
-    file="videos/soldier_staff.mp4";
-
-    if(weapon.includes("Pistol"))
-    file="videos/soldier_pistol.mp4";
-
-}
-
-if(role.includes("Police")){
-
-    if(weapon.includes("Rifle"))
-    file="videos/police_rifle.mp4";
-
-    if(weapon.includes("Magic Staff"))
-    file="videos/police_staff.mp4";
-
-    if(weapon.includes("Pistol"))
-    file="videos/police_pistol.mp4";
-
-}
-
-if(role.includes("Tank")){
-
-    file="videos/tank.mp4";
-
-}
-
-if(role.includes("Fighter Jet")){
-
-    file="videos/fighterjet.mp4";
-
-}
-
-setTimeout(function(){
-
-    pendingVideo = file;
-
     document.getElementById("loading")
     .innerHTML =
-    "✅ Video Ready<br><br>Press Full Screen and Click Start";
+    "⏳ AI is generating video... Please wait.";
 
     document.getElementById("startBtn")
     .style.display =
-    "inline-block";
+    "none";
 
-},3000);
+    const role =
+    document.getElementById("character").value;
+
+    const weapon =
+    document.getElementById("weapon").value;
+
+    let file = "";
+
+    if(role.includes("Soldier")){
+
+        if(weapon.includes("Rifle"))
+        file = "videos/soldier_rifle.mp4";
+
+        if(weapon.includes("Magic Staff"))
+        file = "videos/soldier_staff.mp4";
+
+        if(weapon.includes("Pistol"))
+        file = "videos/soldier_pistol.mp4";
+    }
+
+    if(role.includes("Police")){
+
+        if(weapon.includes("Rifle"))
+        file = "videos/police_rifle.mp4";
+
+        if(weapon.includes("Magic Staff"))
+        file = "videos/police_staff.mp4";
+
+        if(weapon.includes("Pistol"))
+        file = "videos/police_pistol.mp4";
+    }
+
+    if(role.includes("Tank")){
+
+        file = "videos/tank.mp4";
+
+    }
+
+    if(role.includes("Fighter Jet")){
+
+        file = "videos/fighterjet.mp4";
+
+    }
+
+    setTimeout(function(){
+
+        pendingVideo = file;
+
+        document.getElementById("loading")
+        .innerHTML =
+        "✅ Video Ready<br><br>Press Full Screen and Click Start";
+
+        document.getElementById("startBtn")
+        .style.display =
+        "inline-block";
+
+    },3000);
 
 }
 
 function startPlayback(){
 
-const video =
-document.getElementById("resultVideo");
+    const video =
+    document.getElementById("resultVideo");
 
-video.src =
-pendingVideo;
+    video.src =
+    pendingVideo;
 
-video.load();
+    video.load();
 
-video.play();
+    video.play();
 
-if(document.documentElement.requestFullscreen){
+    if(document.documentElement.requestFullscreen){
 
-document.documentElement.requestFullscreen();
+        document.documentElement.requestFullscreen();
 
-}
+    }
 
-document.getElementById("loading")
-.innerHTML =
-"🎬 Now Playing";
+    document.getElementById("loading")
+    .innerHTML =
+    "🎬 Now Playing";
 
-document.getElementById("startBtn")
-.style.display =
-"none";
+    document.getElementById("startBtn")
+    .style.display =
+    "none";
 
 }
 
 </script>
 
 </body>
-
 </html>
