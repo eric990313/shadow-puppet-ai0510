@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>AI Shadow Puppet Character Generator</title>
-    
+
 <style>
 
 body{
@@ -22,13 +22,19 @@ body{
 
     text-align:center;
 
-    font-family:"Microsoft JhengHei";
+    font-family:"Microsoft JhengHei",sans-serif;
 
 }
-    
+
 h1{
 
     color:#fbbf24;
+
+}
+
+h3{
+
+    color:white;
 
 }
 
@@ -78,165 +84,29 @@ button:hover{
 
     color:#fbbf24;
 
-    font-size:20px;
+    font-size:22px;
 
 }
-
-/* 舞台 */
 
 #stage{
 
     width:100%;
 
-    height:720px;
-
-    position:relative;
-
-    overflow:hidden;
-
     margin-top:20px;
 
 }
 
-/* 人物 */
+#resultVideo{
 
-#result{
+    width:80vw;
 
-    position:absolute;
+    max-height:75vh;
 
-    left:50%;
+    object-fit:contain;
 
-    bottom:0;
+    background:black;
 
-    max-width:90%;
-
-    max-height:680px;
-
-    transform:
-    translateX(-50%);
-
-    transform-origin:
-    center bottom;
-
-}
-
-/* 登場 */
-
-.show{
-
-animation:
-entrance .8s ease-out,
-idle 3.5s ease-in-out infinite;
-
-}
-
-@keyframes entrance{
-
-0%{
-
-opacity:0;
-
-transform:
-translateX(-50%)
-translateY(100px)
-scale(.9);
-
-}
-
-100%{
-
-opacity:1;
-
-transform:
-translateX(-50%)
-translateY(0px)
-scale(1);
-
-}
-
-}
-
-/* 待機 */
-
-@keyframes idle{
-
-0%{
-
-transform:
-translateX(-50%)
-translateY(0px)
-rotate(-1deg);
-
-}
-
-25%{
-
-transform:
-translateX(-50%)
-translateY(-4px)
-rotate(1deg);
-
-}
-
-50%{
-
-transform:
-translateX(-50%)
-translateY(-8px)
-rotate(0deg);
-
-}
-
-75%{
-
-transform:
-translateX(-50%)
-translateY(-4px)
-rotate(-1deg);
-
-}
-
-100%{
-
-transform:
-translateX(-50%)
-translateY(0px)
-rotate(1deg);
-
-}
-
-}
-#infoPanel{
-
-    margin-top:20px;
-
-    line-height:2;
-
-}
-
-#roleInfo{
-
-    color:#60a5fa;
-
-    font-size:24px;
-
-    font-weight:bold;
-
-}
-
-#weaponInfo{
-
-    color:#34d399;
-
-    font-size:22px;
-
-}
-
-#actionInfo{
-
-    color:#fbbf24;
-
-    font-size:22px;
+    border-radius:20px;
 
 }
 
@@ -246,324 +116,163 @@ rotate(1deg);
 
 <body>
 
-<h1>AI Shadow Puppet Character Generator</h1>
+<h1>
+
+AI Shadow Puppet Character Generator
+
+</h1>
 
 <h3>角色 Character</h3>
 
 <select id="character">
 
-<option value="軍人">軍人 Soldier</option>
+<option>軍人</option>
 
-<option value="警察">警察 Police Officer</option>
+<option>警察</option>
 
-<option value="吸血鬼">吸血鬼 Vampire</option>
+<option>坦克</option>
 
-<option value="卡通老鼠">卡通老鼠 Cartoon Mouse</option>
-
-<option value="偵探">偵探 Detective</option>
-
-<option value="小木偶">小木偶 Wooden Puppet</option>
-
-<option value="人魚">人魚 Mermaid</option>
-
-<option value="妖怪">妖怪 Fantasy Monster</option>
-
-<option value="平民">平民 Villager</option>
-
-<option value="漁人">漁人 Fisherman</option>
-
-<option value="獸人">獸人 Orc Warrior</option>
+<option>戰鬥機</option>
 
 </select>
 
-<h3>武器 Weapon</h3>
+<h3 id="weaponTitle">
+
+武器 Weapon
+
+</h3>
 
 <select id="weapon">
 
-<option value="長槍">長槍 Long Spear</option>
+<option>步槍</option>
 
-<option value="刀">刀 Knife</option>
+<option>法杖</option>
 
-<option value="劍">劍 Sword</option>
-
-<option value="盾牌">盾牌 Shield</option>
-
-<option value="法杖">法杖 Magic Staff</option>
-
-<option value="棒球棍">棒球棍 Baseball Bat</option>
-
-<option value="手槍">手槍 Pistol</option>
-
-<option value="手榴彈">手榴彈 Grenade</option>
+<option>手槍</option>
 
 </select>
 
 <br><br>
 
-<button onclick="generateImage()">
+<button onclick="generateVideo()">
 
-🎨 生成人物 Generate Character
+🎬 播放角色動畫
 
 </button>
 
 <div id="loading"></div>
 
-<div id="infoPanel">
-
-<div id="roleInfo"></div>
-
-<div id="weaponInfo"></div>
-
-<div id="actionInfo"></div>
-
-</div>
-
 <div id="stage">
 
-<img id="result">
+<video
+id="resultVideo"
+controls
+autoplay
+loop
+playsinline>
+</video>
 
 </div>
-    
+
 <script>
 
-const characterMap = {
+const characterSelect =
+document.getElementById("character");
 
-"軍人":{
-cn:"軍人",
-en:"Soldier"
-},
+characterSelect.addEventListener(
+"change",
+function(){
 
-"警察":{
-cn:"警察",
-en:"Police Officer"
-},
-
-"吸血鬼":{
-cn:"吸血鬼",
-en:"Vampire"
-},
-
-"卡通老鼠":{
-cn:"卡通老鼠",
-en:"Cartoon Mouse"
-},
-
-"偵探":{
-cn:"偵探",
-en:"Detective"
-},
-
-"小木偶":{
-cn:"小木偶",
-en:"Wooden Puppet"
-},
-
-"人魚":{
-cn:"人魚",
-en:"Mermaid"
-},
-
-"妖怪":{
-cn:"妖怪",
-en:"Fantasy Monster"
-},
-
-"平民":{
-cn:"平民",
-en:"Villager"
-},
-
-"漁人":{
-cn:"漁人",
-en:"Fisherman"
-},
-
-"獸人":{
-cn:"獸人",
-en:"Orc Warrior"
-}
-
-};
-
-const weaponMap = {
-
-"長槍":{
-weapon:"long spear",
-action:"thrust attack pose"
-},
-
-"刀":{
-weapon:"knife",
-action:"slash attack pose"
-},
-
-"劍":{
-weapon:"sword",
-action:"sword attack pose"
-},
-
-"盾牌":{
-weapon:"shield",
-action:"defense pose"
-},
-
-"法杖":{
-weapon:"magic staff",
-action:"casting magic ball"
-},
-
-"棒球棍":{
-weapon:"baseball bat",
-action:"baseball swing pose"
-},
-
-"手槍":{
-weapon:"pistol",
-action:"shooting pose"
-},
-
-"手榴彈":{
-weapon:"grenade",
-action:"throwing grenade pose"
-}
-
-};
-
-function generateImage(){
-
-const character =
-characterMap[
-document.getElementById("character").value
-];
+const role =
+this.value;
 
 const weapon =
-weaponMap[
-document.getElementById("weapon").value
-];
+document.getElementById("weapon");
 
-document.getElementById("roleInfo")
-.innerHTML =
-"角色 Character：" +
-character.cn +
-" (" +
-character.en +
-")";
+const weaponTitle =
+document.getElementById("weaponTitle");
 
-document.getElementById("weaponInfo")
-.innerHTML =
-"武器 Weapon：" +
-weapon.weapon;
+if(
+role==="坦克" ||
+role==="戰鬥機"
+){
 
-document.getElementById("actionInfo")
-.innerHTML =
-"動作 Weapon：" +
-weapon.action;
-const prompt = `
+weapon.style.display="none";
 
-Traditional Chinese shadow puppet style,
-
-${character.en},
-
-holding ${weapon.weapon},
-
-${weapon.action},
-
-full body character,
-
-full side view,
-
-side profile,
-
-facing right,
-
-single character only,
-
-character centered,
-
-isolated character,
-
-pure black background,
-
-background color black,
-
-same black background everywhere,
-
-minimal background,
-
-no scenery,
-
-no buildings,
-
-no environment,
-
-no landscape,
-
-game character showcase,
-
-highly detailed,
-
-masterpiece
-
-`;
-document.getElementById("loading")
-.innerHTML =
-"🎨 AI生成中，請稍候... AI is generating; please wait...";
-
-fetch(
-"https://shadow-puppet-ai0510.vercel.app/api/generate",
-{
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-prompt:prompt
-})
-
-}
-)
-.then(r=>r.json())
-.then(data=>{
-
-if(data.image){
-
-const img =
-document.getElementById("result");
-
-img.classList.remove("show");
-
-img.src =
-data.image;
-
-setTimeout(()=>{
-
-img.classList.add("show");
-
-},100);
-
-document.getElementById("loading")
-.innerHTML =
-"✅ 生成完成 Complete";
+weaponTitle.style.display="none";
 
 }
 else{
 
-document.getElementById("loading")
-.innerHTML =
-JSON.stringify(data);
+weapon.style.display="inline-block";
+
+weaponTitle.style.display="block";
 
 }
 
-})
-.catch(err=>{
+}
+);
+
+function generateVideo(){
+
+const role =
+document.getElementById("character").value;
+
+const weapon =
+document.getElementById("weapon").value;
+
+let file = "";
+
+if(role==="軍人"){
+
+    if(weapon==="步槍")
+    file="videos/soldier_rifle.mp4";
+
+    if(weapon==="法杖")
+    file="videos/soldier_staff.mp4";
+
+    if(weapon==="手槍")
+    file="videos/soldier_pistol.mp4";
+
+}
+
+if(role==="警察"){
+
+    if(weapon==="步槍")
+    file="videos/police_rifle.mp4";
+
+    if(weapon==="法杖")
+    file="videos/police_staff.mp4";
+
+    if(weapon==="手槍")
+    file="videos/police_pistol.mp4";
+
+}
+
+if(role==="坦克"){
+
+    file="videos/tank.mp4";
+
+}
+
+if(role==="戰鬥機"){
+
+    file="videos/fighterjet.mp4";
+
+}
 
 document.getElementById("loading")
 .innerHTML =
-"❌ " + err.message;
+"✅ Playing Video";
 
-});
+const video =
+document.getElementById("resultVideo");
+
+video.src = file;
+
+video.load();
+
+video.play();
 
 }
 
