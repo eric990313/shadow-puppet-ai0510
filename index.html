@@ -11,7 +11,7 @@
 body{
     margin:0;
     padding:20px;
-    background:#000;
+    background:#000000;
     color:white;
     text-align:center;
     font-family:"Microsoft JhengHei",sans-serif;
@@ -48,16 +48,6 @@ button{
 
 button:hover{
     background:#1d4ed8;
-}
-
-#startBtn{
-    display:none;
-    margin-left:10px;
-    background:#16a34a;
-}
-
-#startBtn:hover{
-    background:#15803d;
 }
 
 #loading{
@@ -122,10 +112,6 @@ AI Shadow Puppet Character Generator
 🎬 AI Generate Video
 </button>
 
-<button id="startBtn" onclick="startPlayback()">
-▶ Start Presentation
-</button>
-
 <div id="loading"></div>
 
 <div id="stage">
@@ -134,141 +120,112 @@ AI Shadow Puppet Character Generator
 id="resultVideo"
 controls
 loop
-playsinline>
+playsinline
+preload="auto">
 </video>
 
 </div>
 
 <script>
 
-let pendingVideo = "";
+document
+.getElementById("character")
+.addEventListener("change",function(){
 
-const characterSelect =
-document.getElementById("character");
+const role = this.value;
 
-characterSelect.addEventListener("change",function(){
+const weapon =
+document.getElementById("weapon");
 
-    const role = this.value;
+const weaponTitle =
+document.getElementById("weaponTitle");
 
-    const weapon =
-    document.getElementById("weapon");
+if(
+role.includes("Tank") ||
+role.includes("Fighter Jet")
+){
 
-    const weaponTitle =
-    document.getElementById("weaponTitle");
+weapon.style.display = "none";
 
-    if(
-        role.includes("Tank") ||
-        role.includes("Fighter Jet")
-    ){
+weaponTitle.style.display = "none";
 
-        weapon.style.display = "none";
-        weaponTitle.style.display = "none";
+}
+else{
 
-    }
-    else{
+weapon.style.display = "inline-block";
 
-        weapon.style.display = "inline-block";
-        weaponTitle.style.display = "block";
+weaponTitle.style.display = "block";
 
-    }
+}
 
 });
 
 function generateVideo(){
 
-    document.getElementById("loading")
-    .innerHTML =
-    "⏳ AI is generating video... Please wait.";
+document.getElementById("loading")
+.innerHTML =
+"⏳ AI is generating video... Please wait.";
 
-    document.getElementById("startBtn")
-    .style.display =
-    "none";
+const role =
+document.getElementById("character").value;
 
-    const role =
-    document.getElementById("character").value;
+const weapon =
+document.getElementById("weapon").value;
 
-    const weapon =
-    document.getElementById("weapon").value;
+let file = "";
 
-    let file = "";
+if(role.includes("Soldier")){
 
-    if(role.includes("Soldier")){
+    if(weapon.includes("Rifle"))
+    file = "videos/soldier_rifle.mp4";
 
-        if(weapon.includes("Rifle"))
-        file = "videos/soldier_rifle.mp4";
+    if(weapon.includes("Magic Staff"))
+    file = "videos/soldier_staff.mp4";
 
-        if(weapon.includes("Magic Staff"))
-        file = "videos/soldier_staff.mp4";
-
-        if(weapon.includes("Pistol"))
-        file = "videos/soldier_pistol.mp4";
-    }
-
-    if(role.includes("Police")){
-
-        if(weapon.includes("Rifle"))
-        file = "videos/police_rifle.mp4";
-
-        if(weapon.includes("Magic Staff"))
-        file = "videos/police_staff.mp4";
-
-        if(weapon.includes("Pistol"))
-        file = "videos/police_pistol.mp4";
-    }
-
-    if(role.includes("Tank")){
-
-        file = "videos/tank.mp4";
-
-    }
-
-    if(role.includes("Fighter Jet")){
-
-        file = "videos/fighterjet.mp4";
-
-    }
-
-    setTimeout(function(){
-
-        pendingVideo = file;
-
-        document.getElementById("loading")
-        .innerHTML =
-        "✅ Video Ready<br><br>Press Full Screen and Click Start";
-
-        document.getElementById("startBtn")
-        .style.display =
-        "inline-block";
-
-    },3000);
+    if(weapon.includes("Pistol"))
+    file = "videos/soldier_pistol.mp4";
 
 }
 
-function startPlayback(){
+if(role.includes("Police")){
+
+    if(weapon.includes("Rifle"))
+    file = "videos/police_rifle.mp4";
+
+    if(weapon.includes("Magic Staff"))
+    file = "videos/police_staff.mp4";
+
+    if(weapon.includes("Pistol"))
+    file = "videos/police_pistol.mp4";
+
+}
+
+if(role.includes("Tank")){
+
+    file = "videos/tank.mp4";
+
+}
+
+if(role.includes("Fighter Jet")){
+
+    file = "videos/fighterjet.mp4";
+
+}
+
+setTimeout(function(){
 
     const video =
     document.getElementById("resultVideo");
 
-    video.src =
-    pendingVideo;
+    video.src = file;
 
     video.load();
 
-    video.play();
-
-    if(document.documentElement.requestFullscreen){
-
-        document.documentElement.requestFullscreen();
-
-    }
-
     document.getElementById("loading")
     .innerHTML =
-    "🎬 Now Playing";
+    "✅ Video Ready<br>Press ▶ on the video player.";
 
-    document.getElementById("startBtn")
-    .style.display =
-    "none";
+},3000);
 
 }
 
