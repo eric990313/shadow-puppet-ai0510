@@ -90,6 +90,8 @@ AI Shadow Puppet Character Generator
 
 <option>戰鬥機 Fighter Jet</option>
 
+<option>天使 Angel</option>
+
 </select>
 
 <h3 id="weaponTitle">
@@ -142,7 +144,8 @@ document.getElementById("weaponTitle");
 
 if(
 role.includes("Tank") ||
-role.includes("Fighter Jet")
+role.includes("Fighter Jet") ||
+role.includes("Angel")
 ){
 
 weapon.style.display = "none";
@@ -197,6 +200,12 @@ if(role.includes("Police")){
 
     if(weapon.includes("Pistol"))
     file = "videos/police_pistol.mp4";
+
+}
+    
+if(role.includes("Angel")){
+
+    file = "videos/angel.mp4";
 
 }
 
